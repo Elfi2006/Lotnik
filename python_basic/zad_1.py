@@ -10,7 +10,7 @@ def zadanie_1_imiona(lista_imion):
         imie = lista_imion[licznik]
         print("Imie numer", licznik + 1, ":", imie)
 
-        # Zwiekszamy licznik! To wazne!
+
         licznik = licznik + 1
 
 

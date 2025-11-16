@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$/../Zadania z 3 listopada">
       <excludeFolder url="file://$MODULE_DIR$/../Zadania z 3 listopada/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.13 (PythonBasic)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.13" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

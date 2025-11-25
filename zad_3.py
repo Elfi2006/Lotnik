@@ -18,12 +18,12 @@ class House(Property):
     """Klasa dziedzicząca po Property, opisująca Dom."""
 
     def __init__(self, area, rooms, price, address, plot):
-        # Wywołanie konstruktora klasy nadrzędnej
+
         super().__init__(area, rooms, price, address)
         self.plot = plot  # Rozmiar działki (int, np. w m2)
 
     def __str__(self):
-        # Używamy __str__ klasy nadrzędnej
+
         base_str = super().__str__()
         # Zmieniam opis
         return f"Dom: {base_str.replace('Nieruchomość', 'Opis bazowy')} | Działka: {self.plot}m2"
@@ -38,7 +38,7 @@ class Flat(Property):
         self.floor = floor  # Piętro (int)
 
     def __str__(self):
-        # Używamy __str__ klasy nadrzędnej
+
         base_str = super().__str__()
         # Zmieniam opis, aby pokazać, że to Mieszkanie
         return f"Mieszkanie: {base_str.replace('Nieruchomość', 'Opis bazowy')} | Piętro: {self.floor}"

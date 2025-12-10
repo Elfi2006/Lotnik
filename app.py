@@ -1,11 +1,11 @@
 import csv
-import os  # To nam pozwoli naprawić problem ze ścieżkami
+import os
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 # --- 1. KONFIGURACJA ŚCIEŻEK ---
-# To jest kluczowe: ustalamy folder, w którym znajduje się Twój plik app.py
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -42,7 +42,7 @@ class Tag:
 
 # --- 3. INTELIGENTNE WCZYTYWANIE DANYCH ---
 def load_data(filename, class_model):
-    # Tworzymy pełną ścieżkę do pliku (np. C:\Users\...\movies.csv)
+
     full_path = os.path.join(BASE_DIR, filename)
 
     # SPRAWDZENIE CZY PLIK ISTNIEJE
@@ -54,12 +54,12 @@ def load_data(filename, class_model):
     try:
         with open(full_path, mode='r', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
-            next(reader)  # Pominiecie nagłówka
+            next(reader)
 
             for row in reader:
-                if row:  # Ignorujemy puste linie
+                if row:
                     try:
-                        # *row rozpakowuje dane z CSV do klasy
+
                         obj = class_model(*row)
                         data_list.append(obj.__dict__)
                     except TypeError:
@@ -92,9 +92,9 @@ def get_links():
 
 @app.route('/ratings')
 def get_ratings():
-    # Zwracamy tylko 100, bo plik jest ogromny
+
     data = load_data('ratings.csv', Rating)
-    # Jeśli to lista z błędem, zwróć ją całą, jeśli dane - utnij do 100
+
     if len(data) > 0 and "ERROR" in data[0]:
         return jsonify(data)
     return jsonify(data[:100])

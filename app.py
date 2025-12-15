@@ -1,113 +1,200 @@
 import csv
 import os
 from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
+# --- 1. KONFIGURACJA ---
 app = Flask(__name__)
 
-# --- 1. KONFIGURACJA ŚCIEŻEK ---
+# Ustalanie ścieżki do bazy danych
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, 'movies.db')
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Konfiguracja SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 
 # --- 2. MODELE DANYCH ---
-class Movie:
-    def __init__(self, movieId, title, genres):
-        self.movieId = movieId
-        self.title = title
-        self.genres = genres
+
+class Movie(db.Model):
+    __tablename__ = 'movies'
+    movieId = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    genres = db.Column(db.String)
+
+    def to_json(self):
+        return {
+            "movieId": self.movieId,
+            "title": self.title,
+            "genres": self.genres
+        }
 
 
-class Link:
-    def __init__(self, movieId, imdbId, tmdbId):
-        self.movieId = movieId
-        self.imdbId = imdbId
-        self.tmdbId = tmdbId
+class Link(db.Model):
+    __tablename__ = 'links'
+    movieId = db.Column(db.Integer, primary_key=True)
+    imdbId = db.Column(db.String)
+    tmdbId = db.Column(db.String)
+
+    def to_json(self):
+        return {
+            "movieId": self.movieId,
+            "imdbId": self.imdbId,
+            "tmdbId": self.tmdbId
+        }
 
 
-class Rating:
-    def __init__(self, userId, movieId, rating, timestamp):
-        self.userId = userId
-        self.movieId = movieId
-        self.rating = rating
-        self.timestamp = timestamp
+class Rating(db.Model):
+    __tablename__ = 'ratings'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer)
+    movieId = db.Column(db.Integer)
+    rating = db.Column(db.Float)
+    timestamp = db.Column(db.String)
+
+    def to_json(self):
+        return {
+            "userId": self.userId,
+            "movieId": self.movieId,
+            "rating": self.rating,
+            "timestamp": self.timestamp
+        }
 
 
-class Tag:
-    def __init__(self, userId, movieId, tag, timestamp):
-        self.userId = userId
-        self.movieId = movieId
-        self.tag = tag
-        self.timestamp = timestamp
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer)
+    movieId = db.Column(db.Integer)
+    tag = db.Column(db.String)
+    timestamp = db.Column(db.String)
+
+    def to_json(self):
+        return {
+            "userId": self.userId,
+            "movieId": self.movieId,
+            "tag": self.tag,
+            "timestamp": self.timestamp
+        }
 
 
-# --- 3. INTELIGENTNE WCZYTYWANIE DANYCH ---
-def load_data(filename, class_model):
+# --- 3. FUNKCJA DO ŁADOWANIA DANYCH ---
+def import_data():
+    print("--- Sprawdzam pliki CSV i bazę danych... ---")
 
-    full_path = os.path.join(BASE_DIR, filename)
+    # Filmy
+    if Movie.query.first() is None:
+        print("Wczytuje movies.csv...")
+        try:
+            path = os.path.join(basedir, 'movies.csv')
+            with open(path, encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    movie = Movie(movieId=int(row['movieId']), title=row['title'], genres=row['genres'])
+                    db.session.add(movie)
+                db.session.commit()
+        except Exception as e:
+            print(f"Blad movies: {e}")
+    else:
+        print("Filmy OK.")
 
-    # SPRAWDZENIE CZY PLIK ISTNIEJE
-    if not os.path.exists(full_path):
-        print(f"[BŁĄD] Nie widzę pliku pod adresem: {full_path}")
-        return [{"ERROR": f"Brakuje pliku! Szukam go tutaj: {full_path}. Sprawdź folder."}]
+    # Linki
+    if Link.query.first() is None:
+        print("Wczytuje links.csv...")
+        try:
+            path = os.path.join(basedir, 'links.csv')
+            with open(path, encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    link = Link(movieId=int(row['movieId']), imdbId=row['imdbId'], tmdbId=row['tmdbId'])
+                    db.session.add(link)
+                db.session.commit()
+        except Exception as e:
+            print(f"Blad links: {e}")
+    else:
+        print("Linki OK.")
 
-    data_list = []
-    try:
-        with open(full_path, mode='r', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            next(reader)
+    # Tagi
+    if Tag.query.first() is None:
+        print("Wczytuje tags.csv...")
+        try:
+            path = os.path.join(basedir, 'tags.csv')
+            with open(path, encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    tag = Tag(userId=int(row['userId']), movieId=int(row['movieId']), tag=row['tag'],
+                              timestamp=row['timestamp'])
+                    db.session.add(tag)
+                db.session.commit()
+        except Exception as e:
+            print(f"Blad tags: {e}")
+    else:
+        print("Tagi OK.")
 
-            for row in reader:
-                if row:
-                    try:
-
-                        obj = class_model(*row)
-                        data_list.append(obj.__dict__)
-                    except TypeError:
-                        continue  # Ignorujemy błędne wiersze
-                    except Exception as e:
-                        continue
-
-    except Exception as e:
-        return [{"ERROR": f"Błąd podczas czytania pliku: {str(e)}"}]
-
-    return data_list
+    # Oceny
+    if Rating.query.first() is None:
+        print("Wczytuje ratings.csv (czekaj)...")
+        try:
+            path = os.path.join(basedir, 'ratings.csv')
+            with open(path, encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                licznik = 0
+                for row in reader:
+                    rating = Rating(userId=int(row['userId']), movieId=int(row['movieId']), rating=float(row['rating']),
+                                    timestamp=row['timestamp'])
+                    db.session.add(rating)
+                    licznik += 1
+                    if licznik % 1000 == 0:
+                        db.session.commit()
+                db.session.commit()
+        except Exception as e:
+            print(f"Blad ratings: {e}")
+    else:
+        print("Oceny OK.")
 
 
 # --- 4. ENDPOINTY ---
 
 @app.route('/')
-def hello():
-    return jsonify({'hello': 'world', 'status': 'Serwer działa poprawnie'})
+def home():
+    return jsonify({'hello': 'world'})
 
 
 @app.route('/movies')
 def get_movies():
-    return jsonify(load_data('movies.csv', Movie))
+    return jsonify([m.to_json() for m in Movie.query.all()])
 
 
 @app.route('/links')
 def get_links():
-    return jsonify(load_data('links.csv', Link))
-
-
-@app.route('/ratings')
-def get_ratings():
-
-    data = load_data('ratings.csv', Rating)
-
-    if len(data) > 0 and "ERROR" in data[0]:
-        return jsonify(data)
-    return jsonify(data[:100])
+    return jsonify([l.to_json() for l in Link.query.all()])
 
 
 @app.route('/tags')
 def get_tags():
-    return jsonify(load_data('tags.csv', Tag))
+    return jsonify([t.to_json() for t in Tag.query.all()])
+
+
+@app.route('/ratings')
+def get_ratings():
+    return jsonify([r.to_json() for r in Rating.query.limit(100).all()])
 
 
 # --- 5. START SERWERA ---
-if __name__ == '__main__':
-    print(f"--- SERWER STARTUJE ---")
-    print(f"Szukam plików w folderze: {BASE_DIR}")
-    print(f"Upewnij się, że są tam pliki: movies.csv, links.csv, ratings.csv, tags.csv")
-    app.run(debug=True, port=5000)
+
+with app.app_context():
+    db.create_all()
+    import_data()
+
+print("=" * 40)
+print("SERWER DZIAŁA! Kliknij w linki poniżej:")
+print("http://127.0.0.1:5000/movies")
+print("http://127.0.0.1:5000/links")    # Dopisane
+print("http://127.0.0.1:5000/tags")     # Dopisane
+print("http://127.0.0.1:5000/ratings")
+print("=" * 40)
+
+app.run(debug=True, port=5000)

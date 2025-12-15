@@ -6,11 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 # --- 1. KONFIGURACJA ---
 app = Flask(__name__)
 
-# Ustalanie ścieżki do bazy danych
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(basedir, 'movies.db')
 
-# Konfiguracja SQLAlchemy
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -101,7 +101,7 @@ def import_data():
     else:
         print("Filmy OK.")
 
-    # Linki
+
     if Link.query.first() is None:
         print("Wczytuje links.csv...")
         try:
@@ -117,7 +117,6 @@ def import_data():
     else:
         print("Linki OK.")
 
-    # Tagi
     if Tag.query.first() is None:
         print("Wczytuje tags.csv...")
         try:
@@ -134,7 +133,7 @@ def import_data():
     else:
         print("Tagi OK.")
 
-    # Oceny
+
     if Rating.query.first() is None:
         print("Wczytuje ratings.csv (czekaj)...")
         try:

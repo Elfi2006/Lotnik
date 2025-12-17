@@ -1,5 +1,3 @@
-
-
 # --Import z Zadania 1 (Pakiet magazine)
 # Importuje Product i Order
 from magazine.Product import Product
@@ -9,7 +7,7 @@ from magazine.Order import Order
 # Importuje klasę Car
 from vehicles.car import Car
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("--- START APLIKACJI - Modularyzacja Własnego Kodu ---")
 
     # =========================================================

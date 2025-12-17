@@ -1,7 +1,6 @@
-
-
 # Import niezależny (absolutny)
 import magazine.utils
+
 
 class Order:
     def __init__(self, customer):
@@ -15,4 +14,6 @@ class Order:
 
     def calculate_total(self):
         total = sum(item.price for item in self.items)
-        return f"Suma zamówienia dla {self.customer}: {magazine.utils.format_price(total)}"
+        return (
+            f"Suma zamówienia dla {self.customer}: {magazine.utils.format_price(total)}"
+        )

@@ -1,5 +1,3 @@
-
-
 class Car:
     """Klasa reprezentująca samochód."""
 

@@ -3,6 +3,7 @@ def multiply_two_numbers(a: int, b: int) -> int:
     """Mnoży dwie liczby całkowite i zwraca wynik."""
     return a * b
 
+
 # Uruchomienie i wyświetlenie wyniku tego
 wynik_mnozenia = multiply_two_numbers(7, 8)
 

@@ -12,7 +12,7 @@ def process_lists(list_a: List[int], list_b: List[int]) -> List[int]:
     unique_elements_set = set(combined_list)
 
     # 3. Podniesienie każdego elementu do potęgi 3
-    powered_list = [element ** 3 for element in unique_elements_set]
+    powered_list = [element**3 for element in unique_elements_set]
 
     # 4. Zwrócenie listy (zamieniam set z powrotem na listę)
     return powered_list

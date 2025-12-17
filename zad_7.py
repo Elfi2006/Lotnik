@@ -6,6 +6,7 @@ from typing import Optional, Dict, Any, List
 
 # KROK 1: Definicja Klasy z Typowaniem
 
+
 class Brewery:
     """Klasa reprezentująca browar na podstawie danych z openbrewerydb.org."""
 
@@ -21,33 +22,36 @@ class Brewery:
 
     def __init__(self, data: Dict[str, Any]):
         """Konstruktor: Inicjuje obiekt danymi ze słownika z API."""
-        self.id = data.get('id', 'N/A')
-        self.name = data.get('name', 'Brak nazwy')
-        self.brewery_type = data.get('brewery_type', 'N/A')
-        self.city = data.get('city', 'N/A')
-        self.country = data.get('country', 'N/A')
-        self.phone = data.get('phone')
-        self.website_url = data.get('website_url')
+        self.id = data.get("id", "N/A")
+        self.name = data.get("name", "Brak nazwy")
+        self.brewery_type = data.get("brewery_type", "N/A")
+        self.city = data.get("city", "N/A")
+        self.country = data.get("country", "N/A")
+        self.phone = data.get("phone")
+        self.website_url = data.get("website_url")
 
     # Magiczna metoda __str__ - definiuje, jak obiekt ma się wyświetlać
     def __str__(self) -> str:
         """Zwraca przyjazny opis obiektu (wymagane w zadaniu)."""
         # Używam prostego formatowania, żeby dane były czytelne
-        return (f"--- 🍺 Browar: {self.name} ---\n"
-                f"  Typ: {self.brewery_type.capitalize()}\n"
-                f"  Lokalizacja: {self.city}, {self.country}\n"
-                f"  Telefon: {self.phone if self.phone else 'Brak'}\n"
-                f"  Strona WWW: {self.website_url if self.website_url else 'Brak'}")
+        return (
+            f"--- 🍺 Browar: {self.name} ---\n"
+            f"  Typ: {self.brewery_type.capitalize()}\n"
+            f"  Lokalizacja: {self.city}, {self.country}\n"
+            f"  Telefon: {self.phone if self.phone else 'Brak'}\n"
+            f"  Strona WWW: {self.website_url if self.website_url else 'Brak'}"
+        )
 
 
 #  KROK 2: Logika Pobierania Danych
+
 
 def fetch_breweries() -> List[Brewery]:
     """Pobiera 20 pierwszych browarów z API i zwraca listę obiektów Brewery."""
 
     base_url = "https://api.openbrewerydb.org/v1/breweries"
     # Parametr per_page=20 zapewnia, że pobierzemy 20 obiektów
-    params = {'per_page': 20}
+    params = {"per_page": 20}
 
     print("Pobieranie 20 pierwszych obiektów...")
 

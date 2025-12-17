@@ -1,9 +1,11 @@
 # Zadanie 5: Sprawdzenie, czy wartość jest w liście
 from typing import List
 
+
 def contains_value(data_list: List[int], value: int) -> bool:
     """Sprawdza, czy podana wartość jest obecna w liście."""
     return value in data_list
+
 
 # Uruchomienie
 moja_lista = [100, 200, 300, 400]

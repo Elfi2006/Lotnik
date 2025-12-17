@@ -1,5 +1,6 @@
 # zad_3.py
 
+
 def tylko_parzyste_petla_while(lista_liczb):
     print("\n--- Zadanie 3: Tylko Liczby Parzyste (While) ---")
     print(f"Lista glowna: {lista_liczb}")

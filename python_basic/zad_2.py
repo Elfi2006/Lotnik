@@ -4,15 +4,12 @@
 def mnozenie_petla_niedoświadczona(lista_liczb):
     print("\n--- Zadanie 2 (i): Mnozenie petla for (Indeksy) ---")
 
-
-
     # Petla przechodzi przez indeksy: 0, 1, 2, 3, 4
     for i in range(len(lista_liczb)):
 
         lista_liczb[i] = lista_liczb[i] * 2
 
     return lista_liczb
-
 
 
 def mnozenie_skladana_prosta(lista_liczb):

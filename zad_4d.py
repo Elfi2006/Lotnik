@@ -1,5 +1,6 @@
 # zad_2d.py
 
+
 def co_drugi_element(moja_lista):
     print("Co drugi element z listy:")
 

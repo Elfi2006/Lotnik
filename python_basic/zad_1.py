@@ -1,5 +1,6 @@
 # zad_1.py
 
+
 def zadanie_1_imiona(lista_imion):
     print("--- Zadanie 1: Wyświetl 5 Imion ---")
 
@@ -9,7 +10,6 @@ def zadanie_1_imiona(lista_imion):
         # Pobieram imię
         imie = lista_imion[licznik]
         print("Imie numer", licznik + 1, ":", imie)
-
 
         licznik = licznik + 1
 

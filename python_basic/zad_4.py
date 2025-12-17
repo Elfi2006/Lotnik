@@ -1,5 +1,6 @@
 # zad_4.py
 
+
 def pokaz_co_drugi_while_manual(lista_liczb):
     print("\n--- Zadanie 4: Co Drugi Element (Manualny Krok) ---")
     print(f"Lista poczatkowa: {lista_liczb}")

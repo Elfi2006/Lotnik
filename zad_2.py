@@ -1,4 +1,3 @@
-
 class Student:
     def __init__(self, n, o):
         self.name = n
@@ -48,8 +47,10 @@ class Book:
 
     def __str__(self):
 
-        return (f"Tytuł: {self.author_name} {self.aut_nazw} | Strony: {self.liczba_stron} | "
-                f"Lokalizacja: {str(self.library)}")  # Użycie str() zamiast f-stringów
+        return (
+            f"Tytuł: {self.author_name} {self.aut_nazw} | Strony: {self.liczba_stron} | "
+            f"Lokalizacja: {str(self.library)}"
+        )  # Użycie str() zamiast f-stringów
 
 
 class Order:
@@ -66,23 +67,41 @@ class Order:
         opis += f"  Klient: {self.student.name}\n"
         opis += "  KSIĄŻKI:\n"
 
-
         for ksiazka in self.lista_ksiazek:
             opis += f"    - {str(ksiazka)}\n"
 
         return opis
 
 
-
-lib_wawa = Library("Warszawa", "Marszałkowska 10", "00-501", "Pn-Pt 9-18", "123-456-789")
+lib_wawa = Library(
+    "Warszawa", "Marszałkowska 10", "00-501", "Pn-Pt 9-18", "123-456-789"
+)
 lib_krak = Library("Kraków", "Długa 5", "31-147", "Pn-Sb 10-17", "987-654-321")
 
 book1 = Book(lib_wawa, "2020-05-15", "Adam", "Mickiewicz", 350)
 book2 = Book(lib_wawa, "1998-11-01", "Eliza", "Orzeszkowa", 620)
 book3 = Book(lib_krak, "2023-01-20", "Olga", "Tokarczuk", 120)
 
-emp1 = Employee("Marta", "Kowalska", "2018-03-01", "1990-05-12", "Warszawa", "Kwiatowa 5", "01-100", "500-111-222")
-emp2 = Employee("Jan", "Wójcik", "2021-07-15", "1985-01-20", "Kraków", "Słoneczna 8", "31-001", "500-333-444")
+emp1 = Employee(
+    "Marta",
+    "Kowalska",
+    "2018-03-01",
+    "1990-05-12",
+    "Warszawa",
+    "Kwiatowa 5",
+    "01-100",
+    "500-111-222",
+)
+emp2 = Employee(
+    "Jan",
+    "Wójcik",
+    "2021-07-15",
+    "1985-01-20",
+    "Kraków",
+    "Słoneczna 8",
+    "31-001",
+    "500-333-444",
+)
 
 stud1 = Student("Anna Nowak", [60, 70, 80])
 stud3 = Student("Ewa Lis", [40, 50, 45])

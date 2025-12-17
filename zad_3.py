@@ -1,5 +1,3 @@
-
-
 class Property:
     """Klasa bazowa opisująca posiadłość/nieruchomość."""
 
@@ -10,8 +8,10 @@ class Property:
         self.address = address
 
     def __str__(self):
-        return (f"Nieruchomość: {self.address} | Powierzchnia: {self.area}m2, "
-                f"Pokoje: {self.rooms} | Cena: {self.price} PLN")
+        return (
+            f"Nieruchomość: {self.address} | Powierzchnia: {self.area}m2, "
+            f"Pokoje: {self.rooms} | Cena: {self.price} PLN"
+        )
 
 
 class House(Property):

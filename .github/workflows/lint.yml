@@ -13,5 +13,5 @@ jobs:
       - name: Install pycodestyle
         run: pip install pycodestyle
       - name: Run pycodestyle
-        # Uruchamiamy walidator z wykluczeniem venv i zliczaniem błędów [cite: 6, 15]
         run: pycodestyle --exclude=.venv --count .
+

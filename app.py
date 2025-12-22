@@ -9,34 +9,33 @@ from ultralytics import YOLO
 
 app = FastAPI(title="Projekt - Wykrywanie Ludzi")
 
-# To jest Twoja "kolejka" i magazyn wyników
+
 zadania = {}
 
-# Model YOLO - wykryje każdego, nawet na zdjęciu reprezentacji
+
 model = YOLO('yolov8m.pt')
 
 
 @app.get("/")
 def strona_glowna():
-    # To naprawia Twój błąd 404 - od razu przenosi do panelu docs
+  
     return RedirectResponse(url="/docs")
 
 
 def wykonaj_zadanie(id_zadania, obrazek, nazwa_pliku):
-    # Wykrywanie osób (klasa 0 to 'person')
+  
     wyniki = model.predict(obrazek, classes=[0], conf=0.25)
 
     ile_osob = 0
     for r in wyniki:
         ile_osob += len(r.boxes)
-        # Rysowanie ramek [cite: 17]
+       
         for box in r.boxes:
             x1, y1, x2, y2 = map(int, box.xyxy[0])
             cv2.rectangle(obrazek, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
     cv2.imwrite(nazwa_pliku, obrazek)
 
-    # Zapisujemy wynik, żeby można było go sprawdzić później
     zadania[id_zadania] = {"status": "gotowe", "osoby": ile_osob, "foto": nazwa_pliku}
 
 
@@ -49,10 +48,10 @@ def z_dysku(background_tasks: BackgroundTasks, plik: str = "foto.jpg"):
     zadania[id_zadania] = {"status": "pracuję"}
 
     obrazek = cv2.imread(plik)
-    # Wrzucenie na kolejkę (asynchronicznie)
+   
     background_tasks.add_task(wykonaj_zadanie, id_zadania, obrazek, f"wynik_{id_zadania}.jpg")
 
-    return {"task_id": id_zadania}  # Zwracamy ID
+    return {"task_id": id_zadania}  
 
 
 @app.get("/detect-url")
@@ -65,7 +64,7 @@ def z_internetu(background_tasks: BackgroundTasks, link: str):
         bity = np.frombuffer(odp.content, np.uint8)
         obrazek = cv2.imdecode(bity, cv2.IMREAD_COLOR)
 
-        # Wrzucenie na kolejkę
+       
         background_tasks.add_task(wykonaj_zadanie, id_zadania, obrazek, f"wynik_{id_zadania}.jpg")
         return {"task_id": id_zadania}
     except:
@@ -74,7 +73,7 @@ def z_internetu(background_tasks: BackgroundTasks, link: str):
 
 @app.get("/sprawdz/{task_id}")
 def status(task_id: str):
-    # Sprawdzanie wyniku zadania
+   
     wynik = zadania.get(task_id)
     if not wynik:
         return {"info": "Nie ma takiego ID"}

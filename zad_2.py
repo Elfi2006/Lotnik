@@ -4,7 +4,7 @@ class Student:
         self.oceny = o
 
     def __str__(self):
-        # Bardzo prosta reprezentacja
+        
         return f"Student: {self.name}"
 
 
@@ -18,7 +18,7 @@ class Library:
         self.telefon = tel
 
     def __str__(self):
-        # Proste, nieformatowane ciągi znaków
+       
         return "Biblioteka w " + self.miasto + ", tel: " + self.telefon
 
 
@@ -50,7 +50,7 @@ class Book:
         return (
             f"Tytuł: {self.author_name} {self.aut_nazw} | Strony: {self.liczba_stron} | "
             f"Lokalizacja: {str(self.library)}"
-        )  # Użycie str() zamiast f-stringów
+        )  
 
 
 class Order:
